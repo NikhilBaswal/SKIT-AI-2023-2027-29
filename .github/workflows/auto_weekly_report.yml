@@ -1,0 +1,81 @@
+name: Weekly Progress Report Auto-Commit
+
+on:
+schedule:
+# Every Thursday at 11:59 PM IST (18:29 UTC)
+- cron: '29 18 * * 4'
+
+workflow_dispatch:
+
+permissions:
+contents: write
+
+jobs:
+generate-and-commit:
+runs-on: ubuntu-latest
+
+steps:
+  - name: Checkout Repository with Full Git History
+    uses: actions/checkout@v4
+    with:
+      fetch-depth: 0
+      token: ${{ secrets.GITHUB_TOKEN }}
+
+  - name: Set up Python
+    uses: actions/setup-python@v5
+    with:
+      python-version: '3.11'
+
+  - name: Install PDF and Graph Dependencies
+    run: |
+      pip install reportlab matplotlib
+
+  - name: Generate All Missing Weekly Reports
+    run: |
+      python generate_report.py weekly
+
+  - name: Commit Each Report with Its Scheduled Thursday Timestamp
+    shell: bash
+    run: |
+      set -e
+
+      git config user.name "github-actions[bot]"
+      git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      shopt -s nullglob
+
+      found=false
+
+      for file in weekly_reports/*_Weekly_Progress_Report_Form-3_*.pdf
+      do
+        # Skip reports already committed to GitHub
+        if git ls-files --error-unmatch "$file" >/dev/null 2>&1; then
+          echo "Already committed: $file"
+          continue
+        fi
+
+        # Extract scheduled date from filename
+        filename=$(basename "$file")
+        report_date="${filename##*_Form-3_}"
+        report_date="${report_date%.pdf}"
+
+        # Set commit timestamp to Thursday, 11:59 PM IST
+        commit_date="${report_date}T23:59:00+05:30"
+
+        echo "Committing report: $file"
+        echo "Scheduled timestamp: $commit_date"
+
+        git add "$file"
+
+        GIT_AUTHOR_DATE="$commit_date" \
+        GIT_COMMITTER_DATE="$commit_date" \
+        git commit -m "docs: archive Form-3 weekly progress report [skip ci]"
+
+        git push origin HEAD:main
+
+        found=true
+      done
+
+      if [ "$found" = false ]; then
+        echo "No new reports to commit."
+      fi
