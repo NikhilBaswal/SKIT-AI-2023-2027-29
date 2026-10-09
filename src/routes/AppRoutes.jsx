@@ -1,10 +1,11 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Dashboard from '../pages/Dashboard';
 import Login from '../pages/Login';
+import Dashboard from '../pages/Dashboard';
 import Complaints from '../pages/Complaints';
 import Assets from '../pages/Assets';
 import Monitoring from '../pages/Monitoring';
+import Maintenance from '../pages/Maintenance';
 import ProtectedRoute from './ProtectedRoute';
 
 function AppRoutes() {
@@ -15,6 +16,7 @@ function AppRoutes() {
       <Route path="/complaints" element={<ProtectedRoute><Complaints /></ProtectedRoute>} />
       <Route path="/assets" element={<ProtectedRoute allowedRoles={['ADMIN', 'OPERATOR']}><Assets /></ProtectedRoute>} />
       <Route path="/monitoring" element={<ProtectedRoute allowedRoles={['ADMIN', 'OPERATOR']}><Monitoring /></ProtectedRoute>} />
+      <Route path="/maintenance" element={<ProtectedRoute allowedRoles={['ADMIN']}><Maintenance /></ProtectedRoute>} />
     </Routes>
   );
 }
