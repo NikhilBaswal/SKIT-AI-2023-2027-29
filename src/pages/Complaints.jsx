@@ -5,7 +5,6 @@ import ComplaintList from '../components/complaints/ComplaintList';
 import ComplaintForm from '../components/complaints/ComplaintForm';
 import './Complaints.css';
 
-// Static mock data for now — connected to backend APIs in Week 4
 const mockComplaints = [
   { id: 1, description: 'No water supply since morning', status: 'OPEN', assetName: 'Pump A1' },
   { id: 2, description: 'Leakage near main pipeline', status: 'IN_PROGRESS', assetName: 'Pipeline B2' },
@@ -22,6 +21,16 @@ function Complaints() {
     ]);
   };
 
+  const handleStatusChange = (id, newStatus) => {
+    setComplaints((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, status: newStatus } : c))
+    );
+  };
+
+  const handleDelete = (id) => {
+    setComplaints((prev) => prev.filter((c) => c.id !== id));
+  };
+
   return (
     <div className="layout">
       <Sidebar />
@@ -30,7 +39,11 @@ function Complaints() {
         <div className="complaints-body">
           <h3>Complaints</h3>
           <ComplaintForm onAdd={handleAddComplaint} />
-          <ComplaintList complaints={complaints} />
+          <ComplaintList
+            complaints={complaints}
+            onStatusChange={handleStatusChange}
+            onDelete={handleDelete}
+          />
         </div>
       </div>
     </div>
