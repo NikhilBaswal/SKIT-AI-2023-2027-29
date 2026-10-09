@@ -13,6 +13,31 @@
 }
 
 .navbar-user {
-  font-size: 14px;
+  font-size: 13px;
   opacity: 0.9;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.alert-badge {
+  background-color: #f59e0b;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.logout-btn {
+  background-color: #ffffff;
+  color: #0f766e;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
 }
