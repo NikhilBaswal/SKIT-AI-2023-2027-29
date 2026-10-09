@@ -1,0 +1,23 @@
+.complaint-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.complaint-table th,
+.complaint-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
+}
+
+.complaint-table th {
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+.empty-text {
+  color: #64748b;
+  margin-top: 16px;
+}
