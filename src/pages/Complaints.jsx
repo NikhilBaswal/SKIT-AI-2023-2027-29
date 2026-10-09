@@ -1,34 +1,66 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../components/common/Navbar';
 import Sidebar from '../components/common/Sidebar';
 import ComplaintList from '../components/complaints/ComplaintList';
 import ComplaintForm from '../components/complaints/ComplaintForm';
+import Loader from '../components/common/Loader';
+import { useAuth } from '../context/AuthContext';
+import {
+  getAllComplaints, createComplaint, updateComplaintStatus, deleteComplaint,
+} from '../services/complaintService';
 import './Complaints.css';
 
-const mockComplaints = [
-  { id: 1, description: 'No water supply since morning', status: 'OPEN', assetName: 'Pump A1' },
-  { id: 2, description: 'Leakage near main pipeline', status: 'IN_PROGRESS', assetName: 'Pipeline B2' },
-  { id: 3, description: 'Low water pressure in tank area', status: 'RESOLVED', assetName: 'Tank C3' },
-];
-
 function Complaints() {
-  const [complaints, setComplaints] = useState(mockComplaints);
+  const { user } = useAuth();
+  const [complaints, setComplaints] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const handleAddComplaint = (newComplaint) => {
-    setComplaints((prev) => [
-      ...prev,
-      { id: prev.length + 1, status: 'OPEN', ...newComplaint },
-    ]);
+  const loadComplaints = async () => {
+    try {
+      setLoading(true);
+      const res = await getAllComplaints();
+      setComplaints(res.data.data || []);
+    } catch (err) {
+      setError('Failed to load complaints.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleStatusChange = (id, newStatus) => {
-    setComplaints((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, status: newStatus } : c))
-    );
+  useEffect(() => {
+    loadComplaints();
+  }, []);
+
+  const handleAddComplaint = async ({ description, assetName }) => {
+    try {
+      await createComplaint({
+        raisedById: user?.id || 1,
+        description,
+        assetId: null, // resolved from assetName in a future enhancement
+      });
+      loadComplaints();
+    } catch (err) {
+      setError('Failed to raise complaint.');
+    }
   };
 
-  const handleDelete = (id) => {
-    setComplaints((prev) => prev.filter((c) => c.id !== id));
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      await updateComplaintStatus(id, newStatus);
+      loadComplaints();
+    } catch (err) {
+      setError('Failed to update complaint status.');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteComplaint(id);
+      loadComplaints();
+    } catch (err) {
+      setError('Failed to delete complaint.');
+    }
   };
 
   return (
@@ -38,12 +70,15 @@ function Complaints() {
         <Navbar />
         <div className="complaints-body">
           <h3>Complaints</h3>
+          {error && <p className="page-error">{error}</p>}
           <ComplaintForm onAdd={handleAddComplaint} />
-          <ComplaintList
-            complaints={complaints}
-            onStatusChange={handleStatusChange}
-            onDelete={handleDelete}
-          />
+          {loading ? <Loader /> : (
+            <ComplaintList
+              complaints={complaints}
+              onStatusChange={handleStatusChange}
+              onDelete={handleDelete}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -1,24 +1,64 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../components/common/Navbar';
 import Sidebar from '../components/common/Sidebar';
 import ScheduleList from '../components/maintenance/ScheduleList';
 import MaintenanceForm from '../components/maintenance/MaintenanceForm';
+import Loader from '../components/common/Loader';
+import { getAllAssets } from '../services/assetService';
+import { getAllSchedules, createSchedule, deleteSchedule } from '../services/maintenanceService';
 import './Maintenance.css';
 
-const mockSchedules = [
-  { id: 1, assetName: 'Pump A1', taskType: 'Motor servicing', frequency: 'Monthly', nextDueDate: '2026-11-05' },
-  { id: 2, assetName: 'Tank C3', taskType: 'Cleaning', frequency: 'Quarterly', nextDueDate: '2026-10-15' },
-];
-
 function Maintenance() {
-  const [schedules, setSchedules] = useState(mockSchedules);
+  const [schedules, setSchedules] = useState([]);
+  const [assets, setAssets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const handleAdd = (newSchedule) => {
-    setSchedules((prev) => [...prev, { id: prev.length + 1, ...newSchedule }]);
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      const [scheduleRes, assetRes] = await Promise.all([getAllSchedules(), getAllAssets()]);
+      setSchedules(scheduleRes.data.data || []);
+      setAssets(assetRes.data.data || []);
+    } catch (err) {
+      setError('Failed to load maintenance data.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = (id) => {
-    setSchedules((prev) => prev.filter((s) => s.id !== id));
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const handleAdd = async (formData) => {
+    const matchedAsset = assets.find(
+      (a) => a.name.toLowerCase() === formData.assetName.toLowerCase()
+    );
+    if (!matchedAsset) {
+      setError('Asset not found. Please enter an exact asset name.');
+      return;
+    }
+    try {
+      await createSchedule({
+        assetId: matchedAsset.id,
+        nextDueDate: formData.nextDueDate,
+        frequency: formData.frequency,
+        taskType: formData.taskType,
+      });
+      loadData();
+    } catch (err) {
+      setError('Failed to schedule maintenance.');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteSchedule(id);
+      loadData();
+    } catch (err) {
+      setError('Failed to delete schedule.');
+    }
   };
 
   return (
@@ -28,8 +68,11 @@ function Maintenance() {
         <Navbar />
         <div className="maintenance-body">
           <h3>Maintenance Scheduling</h3>
+          {error && <p className="page-error">{error}</p>}
           <MaintenanceForm onAdd={handleAdd} />
-          <ScheduleList schedules={schedules} onDelete={handleDelete} />
+          {loading ? <Loader /> : (
+            <ScheduleList schedules={schedules} onDelete={handleDelete} />
+          )}
         </div>
       </div>
     </div>
