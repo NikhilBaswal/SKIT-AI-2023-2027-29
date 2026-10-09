@@ -4,6 +4,7 @@ import Dashboard from '../pages/Dashboard';
 import Login from '../pages/Login';
 import Complaints from '../pages/Complaints';
 import Assets from '../pages/Assets';
+import Monitoring from '../pages/Monitoring';
 import ProtectedRoute from './ProtectedRoute';
 
 function AppRoutes() {
@@ -13,6 +14,7 @@ function AppRoutes() {
       <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/complaints" element={<ProtectedRoute><Complaints /></ProtectedRoute>} />
       <Route path="/assets" element={<ProtectedRoute allowedRoles={['ADMIN', 'OPERATOR']}><Assets /></ProtectedRoute>} />
+      <Route path="/monitoring" element={<ProtectedRoute allowedRoles={['ADMIN', 'OPERATOR']}><Monitoring /></ProtectedRoute>} />
     </Routes>
   );
 }

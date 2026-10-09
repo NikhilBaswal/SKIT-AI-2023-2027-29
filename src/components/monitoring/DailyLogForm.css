@@ -1,0 +1,37 @@
+.log-form {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.log-form input,
+.log-form select {
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 140px;
+}
+
+.log-form button {
+  padding: 8px 16px;
+  background-color: #0f766e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  height: 38px;
+}
+
+.field-error {
+  color: #b91c1c;
+  font-size: 12px;
+  margin-top: 4px;
+}
