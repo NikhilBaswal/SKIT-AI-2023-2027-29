@@ -9,3 +9,16 @@
 .dashboard-body {
   padding: 24px;
 }
+
+.stats-row {
+  display: flex;
+  gap: 16px;
+  margin: 16px 0 24px;
+  flex-wrap: wrap;
+}
+
+.charts-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
