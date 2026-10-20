@@ -1,0 +1,9 @@
+.assets-body {
+  padding: 24px;
+}
+
+.page-error {
+  color: #b91c1c;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
