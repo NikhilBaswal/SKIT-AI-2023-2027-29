@@ -1,0 +1,16 @@
+.anomaly-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-normal {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.badge-anomaly {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
