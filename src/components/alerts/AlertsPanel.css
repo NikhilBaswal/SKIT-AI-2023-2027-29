@@ -1,0 +1,11 @@
+.alerts-panel { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.alert-item {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #fef9c3; padding: 10px 14px; border-radius: 8px; font-size: 13px;
+}
+.alert-type { font-weight: 600; color: #a16207; }
+.alert-item button {
+  background: #0f766e; color: white; border: none; padding: 4px 10px;
+  border-radius: 6px; cursor: pointer; font-size: 12px;
+}
+.alerts-empty { color: #64748b; font-size: 13px; margin-top: 12px; }
