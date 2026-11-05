@@ -1,0 +1,22 @@
+.monitoring-body {
+  padding: 24px;
+}
+
+.page-error {
+  color: #b91c1c;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.asset-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.asset-filter select {
+  padding: 6px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
