@@ -1,0 +1,20 @@
+@media (max-width: 768px) {
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; min-height: auto; display: flex; overflow-x: auto; }
+  .sidebar ul { display: flex; }
+  .sidebar li { white-space: nowrap; }
+  .stats-row, .charts-row { flex-direction: column; }
+  .chart-card, .stats-card { min-width: 100%; }
+  .navbar { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .asset-form .form-row, .log-form, .maintenance-form, .complaint-form {
+    flex-direction: column;
+  }
+  .asset-table, .complaint-table, .schedule-table, .log-table {
+    display: block; overflow-x: auto; white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card { width: 90%; }
+  .navbar-title { font-size: 15px; }
+}
