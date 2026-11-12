@@ -1,0 +1,17 @@
+{
+  "info": {
+    "name": "Gram Panchayat Water O&M API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    { "name": "Health Check", "request": { "method": "GET", "url": "{{baseUrl}}/api/health" } },
+    { "name": "Register", "request": { "method": "POST", "url": "{{baseUrl}}/api/auth/register" } },
+    { "name": "Login", "request": { "method": "POST", "url": "{{baseUrl}}/api/auth/login" } },
+    { "name": "Get All Assets", "request": { "method": "GET", "url": "{{baseUrl}}/api/assets" } },
+    { "name": "Create Monitoring Log", "request": { "method": "POST", "url": "{{baseUrl}}/api/monitoring/logs" } },
+    { "name": "Get Complaints", "request": { "method": "GET", "url": "{{baseUrl}}/api/complaints" } },
+    { "name": "Get Maintenance Schedules", "request": { "method": "GET", "url": "{{baseUrl}}/api/maintenance/schedules" } },
+    { "name": "Get Alerts", "request": { "method": "GET", "url": "{{baseUrl}}/api/alerts" } }
+  ],
+  "variable": [{ "key": "baseUrl", "value": "http://localhost:8080" }]
+}
